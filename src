@@ -1,0 +1,68 @@
+[
+  {
+    "time": "10:00",
+    "value": 10
+  },
+  {
+    "time": "11:00",
+    "value": 15
+  },
+  {
+    "time": "12:00",
+    "value": 8
+  },
+  {
+    "time": "13:00",
+    "value": 12
+  },
+  {
+    "time": "14:00",
+    "value": 20
+  }
+]
+
+import json
+import matplotlib.pyplot as plt
+import sys
+
+def generate_line_graph(json_file_path, output_path="output.png"):
+    """
+    Reads JSON data from a file, generates a line graph, and saves it.
+
+    Args:
+        json_file_path (str): Path to the JSON data file.
+        output_path (str, optional): Path to save the generated graph. Defaults to "output.png".
+    """
+    try:
+        with open(json_file_path, 'r') as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        print(f"Error: File not found at '{json_file_path}'")
+        return
+    except json.JSONDecodeError:
+        print(f"Error: Invalid JSON format in '{json_file_path}'")
+        return
+
+    if not data or not isinstance(data, list) or not all(isinstance(item, dict) and "time" in item and "value" in item for item in data):
+        print("Error: JSON data should be a list of dictionaries with 'time' and 'value' keys.")
+        return
+
+    times = [item['time'] for item in data]
+    values = [item['value'] for item in data]
+
+    plt.figure(figsize=(10, 6))
+    plt.plot(times, values, marker='o')
+    plt.xlabel("Time")
+    plt.ylabel("Value")
+    plt.title("Data Visualization")
+    plt.grid(True)
+    plt.tight_layout()
+    plt.savefig(output_path)
+    print(f"Graph saved to '{output_path}'")
+
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Usage: python main.py <path_to_json_file>")
+    else:
+        json_file_path = sys.argv[1]
+        generate_line_graph(json_file_path)
