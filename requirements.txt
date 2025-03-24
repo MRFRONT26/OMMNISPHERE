@@ -1,0 +1,7 @@
+pip install -r requirements.txt
+json  # For parsing JSON data (standard library, but good to include for clarity)
+pandas
+matplotlib
+seaborn
+# plotly  # Uncomment if you plan to use Plotly for interactive graphs
+# bokeh   # Uncomment if you plan to use Bokeh for interactive graphs
