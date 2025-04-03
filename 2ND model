@@ -1,0 +1,62 @@
+import numpy as np
+from sklearn.linear_model import LinearRegression
+import matplotlib.pyplot as plt # Optional: for visualization
+
+# --- 1. Generate Sample Data ---
+# Let's create data where y is roughly 2x + 1 plus some noise
+np.random.seed(0) # for reproducible results
+num_samples = 50
+
+# Create input features (X). Needs to be a 2D array for scikit-learn.
+# We generate random numbers between 0 and 10
+X = np.random.rand(num_samples, 1) * 10
+
+# Create target variable (y) based on X with some random noise
+# y = 2*X + 1 + noise
+y = 2 * X + 1 + np.random.randn(num_samples, 1) * 2 # randn gives Gaussian noise
+
+# --- 2. Create the AI Model ---
+# We'll use Linear Regression, one of the simplest models
+model = LinearRegression()
+
+# --- 3. Train the Model ---
+# The model "learns" the relationship between X and y from the data
+print("Training the model...")
+model.fit(X, y)
+print("Model training complete.")
+
+# --- 4. Inspect the Trained Model (Optional) ---
+# The model learned a slope (coefficient) and an intercept
+learned_slope = model.coef_[0][0]
+learned_intercept = model.intercept_[0]
+print(f"\nLearned Relationship:")
+print(f"  Slope (Coefficient): {learned_slope:.2f}") # Should be close to 2
+print(f"  Intercept: {learned_intercept:.2f}")     # Should be close to 1
+
+# --- 5. Make Predictions ---
+# Let's predict values for some new unseen data points
+X_new = np.array([[0], [5], [10]]) # Create new data points (needs to be 2D)
+predictions = model.predict(X_new)
+
+print("\nMaking predictions on new data:")
+for i in range(len(X_new)):
+    print(f"  Input (X): {X_new[i][0]}, Predicted Output (y): {predictions[i][0]:.2f}")
+
+# --- 6. (Optional) Visualize the Results ---
+try:
+    plt.figure(figsize=(8, 6))
+    plt.scatter(X, y, color='blue', label='Original Data Points') # Plot original data
+    plt.plot(X, model.predict(X), color='red', linewidth=2, label='Learned Regression Line') # Plot the learned line
+    plt.scatter(X_new, predictions, color='green', marker='x', s=100, label='New Predictions') # Plot predictions
+    plt.xlabel("Input Feature (X)")
+    plt.ylabel("Target Value (y)")
+    plt.title("Simple Linear Regression Model")
+    plt.legend()
+    plt.grid(True)
+    print("\nShowing plot...")
+    plt.show()
+except ImportError:
+    print("\nMatplotlib not installed. Skipping visualization.")
+    print("Install it with: pip install matplotlib")
+
+print("\nSimple AI model execution finished.")
